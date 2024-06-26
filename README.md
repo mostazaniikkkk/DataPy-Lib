@@ -1,31 +1,39 @@
 # DataPy Lib 🛠️
 
-¡Bienvenido al súper dúper repositorio de **DataPy Lib**! Esta es una biblioteca enfocada en la creación de Datapacks de Minecraft.
+Welcome to the super duper repository of **DataPy Lib**! This is a library focused on creating Minecraft Datapacks.
 
-> ⚠️ **AVISO**: De momento, el proyecto está en fase Alpha y se considera súper inestable.
+> ⚠️ **NOTICE**: Currently, the project is in Alpha phase and is considered super unstable.
 
-<a href="https://ko-fi.com/tu_nombre_de_usuario" target="_blank"><img src="https://www.ko-fi.com/img/githubbutton_sm.svg"></a>
+<a href="https://ko-fi.com/mostazaniikkkk" target="_blank"><img src="https://www.ko-fi.com/img/githubbutton_sm.svg"></a>
 
-## Características 🌟
+## Features 🌟
 
-- Crea desde cero la estructura básica de un datapack.
-- Permite añadir funciones.
+- Creates the basic structure of a datapack from scratch.
+- Allows adding functions.
 
-## ¿Por qué crear una biblioteca así? 🤔
+## Why create a library like this? 🤔
 
-Tenía razones de sobra. Comenzando, no me gusta mucho el formato de los mcfunction para proyectos más grandes, termina siendo un lío organizar todo y sincronizarlo, sobre todo a la hora de actualizar proyectos o añadir características. Utilizando Python como un núcleo para hacer de todo se puede mantener un proyecto más grande de forma sencilla y ordenada, y también gracias al lenguaje, el skill gap que tiene el uso de esta biblioteca es relativamente bajo.
+I had plenty of reasons. Starting off, I don't really like the format of mcfunction for larger projects, it ends up being a mess to organize everything and synchronize it, especially when updating projects or adding features. Using Python as a core to do everything, you can maintain a larger project in a simple and orderly way, and also thanks to the language, the skill gap that the use of this library has is relatively low.
 
-> 📌 **OJO**, esto es más cercano a un Makefile que a un API de mods como Forge. Esta herramienta **NO** da soporte a Python para Minecraft, solo se encarga de organizar tu Datapack, automatiza tareas y simplifica el proceso, por lo que no esperes poder utilizar sentencias como comparadores, clases y demás características de Python dentro de tu Datapack.
+> 📌 **NOTE**, this is closer to a Makefile than to a mod API like Forge. This tool **DOES NOT** support Python for Minecraft, it only takes care of organizing your Datapack, automates tasks and simplifies the process, so don't expect to be able to use statements like comparators, classes and other Python features within your Datapack.
 
-## Metas para llegar a la versión 1.0.0 🎯
+## Goals to reach version 1.0.0 🎯
 
-- Documentación del proyecto.
-- Abstraer las siguientes funciones:
-  - Creación de items y bloques.
-  - Implementación de recetas.
-  - Nuevos logros.
-  - Creación del Resource Pack automatizada.
-- Subir el proyecto como biblioteca pip de Python.
+- Project documentation.
+- Abstract the following functions:
+  - Creation of items and blocks.
+  - Implementation of recipes.
+  - New achievements.
+  - Automated Resource Pack creation.
+- Upload the project as a Python pip library.
 
 
-Se agradece enormemente el feedback en esta fase del proyecto, por lo que si te gustaria que agregara una funcion, no dudes en levantar un issue para discutir acerca de su implementacion :DDDD
+## 📣 Feedback and Contributions
+
+Your feedback is extremely valuable at this stage of the project. If you have any ideas for a new feature or if there is something you would like to see implemented, don't hesitate to open an issue. I'm excited to hear your ideas and discuss their implementation! 😄
+
+## ☕ Support the Project
+
+If you like my work and want to support me, consider buying me a drink on Ko-fi. Your support will help me continue working and make this project even bigger. Thank you very much! T-T
+
+
