@@ -6,12 +6,15 @@ class DatapackManager:
     name = None
     icon = None
     loadMsg = None
+    rpVer = None
+
     items = []
     func = []
     listenedFunc = []
     recipe = []
+    blocks = []
 
-    def __init__(self, name, icon = "icon", mineVer = 10, desc = ""):
+    def __init__(self, name, icon = "icon", mineVer = 10, rpVer = 15, desc = ""):
         self.meta = {
             "pack": {
                 "pack_format": mineVer,
@@ -20,6 +23,7 @@ class DatapackManager:
         }
         self.name = name
         self.icon = icon
+        self.rpVer = rpVer
     
     def AddLoadMsg(self, msg = f"Datapack {name}: Loaded."):
         if isinstance(msg, str): self.loadMsg = f"tellraw as @a {msg}"
@@ -52,3 +56,28 @@ class DatapackManager:
                     datapack_zip.writestr(f"data/{self.name}/functions/{sentence.name}.mcfunction", function_mcmeta.getvalue())
 
         print("Datapack has been successfully compiled.")
+
+    #Funciones constructores
+    def SetIcon(self, name):
+        self.icon = name
+        return self
+    
+    def AddFunction(self, func):
+        self.func.append(func)
+        return self
+    
+    def AddListener(self, func):
+        self.listenedFunc.append(func)
+        return self
+
+    def AddItem(self, item):
+        self.items.append(item)
+        return self
+    
+    def AddBlock(self, item):
+        self.blocks.append(item)
+        return self
+    
+    def AddRecipe(self, item):
+        self.recipe.append(item)
+        return self
