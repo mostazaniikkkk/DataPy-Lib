@@ -10,6 +10,7 @@ Welcome to the super duper repository of **DataPy Lib**! This is a library focus
 
 - Creates the basic structure of a datapack from scratch.
 - Allows adding functions.
+- Automated Resource Pack creation.
 
 ## Why create a library like this? 🤔
 
@@ -24,7 +25,6 @@ I had plenty of reasons. Starting off, I don't really like the format of mcfunct
   - Creation of items and blocks.
   - Implementation of recipes.
   - New achievements.
-  - Automated Resource Pack creation.
 - Upload the project as a Python pip library.
 
 
