@@ -1,5 +1,6 @@
 import json, io, zipfile
 from . import func
+from .rspackManager import ResourcePackManager
 
 class DatapackManager:
     meta = None
@@ -7,6 +8,8 @@ class DatapackManager:
     icon = None
     loadMsg = None
     rpVer = None
+    desc = None
+    format = None
 
     items = []
     func = []
@@ -15,16 +18,22 @@ class DatapackManager:
     blocks = []
 
     def __init__(self, name, icon = "icon", mineVer = 10, rpVer = 15, desc = ""):
-        self.meta = {
-            "pack": {
-                "pack_format": mineVer,
-                "description": desc
-            }
-        }
+        self.format = mineVer
+        self.desc = desc
+        self.UpdateMeta()
+
         self.name = name
         self.icon = icon
         self.rpVer = rpVer
     
+    def UpdateMeta(self):
+        self.meta = {
+            "pack": {
+                "pack_format": self.format,
+                "description": self.desc
+            }
+        }
+
     def AddLoadMsg(self, msg = f"Datapack {name}: Loaded."):
         if isinstance(msg, str): self.loadMsg = f"tellraw as @a {msg}"
         elif isinstance(msg, func.Function): self.loadMsg = "\n".join(msg.functionList)
@@ -55,6 +64,8 @@ class DatapackManager:
                     function_mcmeta = io.StringIO("\n".join(sentence.functionList))
                     datapack_zip.writestr(f"data/{self.name}/functions/{sentence.name}.mcfunction", function_mcmeta.getvalue())
 
+        if self.items: ResourcePackManager(self.name, self.items).Make()
+
         print("Datapack has been successfully compiled.")
 
     #Funciones constructores
@@ -80,4 +91,14 @@ class DatapackManager:
     
     def AddRecipe(self, item):
         self.recipe.append(item)
+        return self
+    
+    def UpdateDesc(self, desc):
+        self.desc = desc
+        self.UpdateMeta()
+        return self
+    
+    def UpdateFormat(self, format):
+        self.format = format
+        self.UpdateMeta()
         return self
