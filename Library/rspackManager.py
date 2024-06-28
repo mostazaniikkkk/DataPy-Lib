@@ -74,3 +74,4 @@ class ResourcePackManager:
                     rspack_zip.write(file_route, arcname=f'assets/minecraft/models/item/{file}') # Añade el archivo al ZIP en una sección específica
 
             os.rmdir('cache')
+            print("Resource pack has baked succesfully :D")

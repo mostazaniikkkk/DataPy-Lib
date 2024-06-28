@@ -28,9 +28,9 @@ class Item:
     
     #Funciones constructores
     def UpdateItem(self):
-        self.item = f"{self.itemBase}{{display: Name '{json.dumps(self.itemDisplay)}',
-            {f'Enchantments: {", ".join(self.enchantment)}' if self.enchantment else ''},
-            CustomModelData: {self.cmdId}}}"
+        self.item = f"{self.itemBase}{{{{display: Name '{json.dumps(self.itemDisplay)}',\
+                    {f'Enchantments: {', '.join(self.enchantment)}' if self.enchantment else ''},\
+                    CustomModelData: {self.cmdId}}}}}"
         return self
     
     def SetItemBase(self, name):

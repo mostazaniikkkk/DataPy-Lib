@@ -1,7 +1,7 @@
 from DataPyLib.datapackManager import DatapackManager
 from DataPyLib.func import Function
 
-pack = DatapackManager("Hello World", "wavy", 9, "Hola mundo :D")
+pack = DatapackManager("Hello World", "icon", 9, "Hola mundo :D")
 
 helloWorld = Function("Hello World")\
     .addFunction("rawtell", "Diamantito", "@p")\
