@@ -1,4 +1,4 @@
-import json, io, zipfile
+import json, io, zipfile, random
 from . import func
 from .rspackManager import ResourcePackManager
 
@@ -10,6 +10,7 @@ class DatapackManager:
     rpVer = None
     desc = None
     format = None
+    cmdId = None
 
     items = []
     func = []
@@ -64,7 +65,9 @@ class DatapackManager:
                     function_mcmeta = io.StringIO("\n".join(sentence.functionList))
                     datapack_zip.writestr(f"data/{self.name}/functions/{sentence.name}.mcfunction", function_mcmeta.getvalue())
 
-        if self.items: ResourcePackManager(self.name, self.items).Make()
+        #Datapack Manager
+        if self.cmdId is None: self.cmdId = random.randint(1, 99999)
+        if self.items: ResourcePackManager(self.name, self.items, self.cmdId).Make()
 
         print("Datapack has been successfully compiled.")
 
@@ -101,4 +104,8 @@ class DatapackManager:
     def UpdateFormat(self, format):
         self.format = format
         self.UpdateMeta()
+        return self
+    
+    def SetCustomModelData(self, cmdId):
+        self.cmdId = cmdId
         return self

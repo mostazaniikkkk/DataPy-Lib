@@ -7,22 +7,25 @@ class Item:
     itemBase = None
     texture = None
 
+    name = None
+    italic = None
+    color = None
+
     enchantment = []
     leftClick = None
     rightClick = None
 
     def __init__(self, name, itemBase = "stick", texture = None, italic = False, color = "white"):
-        self.itemDisplay = {
-            "text": name.replace(" ", "_"),
-            "italic": italic,
-            "color": color
-        }
+        self.name = name
+        self.italic = italic
+        self.color = color
+        self.UpdateDisplay()
 
         self.itemBase = itemBase
         self.texture = texture
 
         self.UpdateItem()
-
+    
     #Funciones constructores
     def UpdateItem(self):
         self.item = f"{self.itemBase}{{display: Name '{json.dumps(self.itemDisplay)}',
@@ -49,4 +52,12 @@ class Item:
     
     def SetLeftAction(self, function):
         self.leftClick = function
+        return self
+    
+    def UpdateDisplay(self):
+        self.itemDisplay = {
+            "text": self.name.replace(" ", "_"),
+            "italic": self.italic,
+            "color": self.color
+        }
         return self
