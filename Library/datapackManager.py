@@ -64,6 +64,10 @@ class DatapackManager:
                 if sentence.functionList:  # Comprueba si functionList no está vacío
                     function_mcmeta = io.StringIO("\n".join(sentence.functionList))
                     datapack_zip.writestr(f"data/{self.name}/functions/{sentence.name}.mcfunction", function_mcmeta.getvalue())
+            
+            for item in self.items:
+                debug_mcmeta = io.StringIO(f"give @p {item.item}")
+                datapack_zip.writestr(f"data/{self.name}/function/give/{item.name}.mcfunction", debug_mcmeta.getvalue())
 
         #Datapack Manager
         if self.cmdId is None: self.cmdId = random.randint(1, 99999)
