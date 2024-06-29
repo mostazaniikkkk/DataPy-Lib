@@ -14,6 +14,7 @@ class Item:
     enchantment = []
     leftClick = None
     rightClick = None
+    lootItem = None
 
     def __init__(self, name, itemBase = "stick", texture = None, italic = False, color = "white"):
         self.name = name
