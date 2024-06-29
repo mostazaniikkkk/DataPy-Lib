@@ -7,6 +7,6 @@ helloWorld = Function("Hello World")\
     .addFunction("rawtell", "Diamantito", "@p")\
     .addFunction("give", "minecraft:diamond_sword", "@p")
 
-pack.func.append(helloWorld)
+pack.AddFunction(helloWorld)
 
 pack.Make()

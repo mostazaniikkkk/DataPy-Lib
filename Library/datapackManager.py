@@ -1,4 +1,4 @@
-import json, io, zipfile, random
+import json, io, zipfile, random, os
 from . import func
 from .rspackManager import ResourcePackManager
 
@@ -23,7 +23,7 @@ class DatapackManager:
         self.desc = desc
         self.UpdateMeta()
 
-        self.name = name
+        self.name = name.replace(" ", "_")
         self.icon = icon
         self.rpVer = rpVer
     
@@ -48,6 +48,14 @@ class DatapackManager:
 
     def Make(self):
         print("Baking Datapack...")
+
+        if self.cmdId is None: self.cmdId = random.randint(1, 99999)
+        for i, item in enumerate(self.items, start=1):
+            item.cmdId = self.cmdId + i
+
+        os.makedirs("cache")
+
+        #ZIP Manager
         with zipfile.ZipFile(f'{self.name}.zip', 'w') as datapack_zip:
             #Carga basica
             pack_mcmeta = io.StringIO(json.dumps(self.meta)) # Crear el archivo pack.mcmeta en memoria
@@ -60,7 +68,7 @@ class DatapackManager:
             datapack_zip.writestr('data/minecraft/tags/functions/tick.json', self.JsonDef("tick"))
 
             #Funciones
-            fileName = self.name.replace(" ", "_")
+            fileName = self.name
             for sentence in self.func:
                 if sentence.functionList:  # Comprueba si functionList no está vacío
                     function_mcmeta = io.StringIO("\n".join(sentence.functionList))
@@ -71,8 +79,7 @@ class DatapackManager:
                 datapack_zip.writestr(f"data/{self.name}/function/give/{item.name}.mcfunction", debug_mcmeta.getvalue())
 
         #Datapack Manager
-        if self.cmdId is None: self.cmdId = random.randint(1, 99999)
-        if self.items: ResourcePackManager(self.name, self.items, self.cmdId).Make()
+        if self.items: ResourcePackManager(self.name, self.items, self.cmdId, self.icon).Make()
 
         print("Datapack has been successfully compiled.")
 

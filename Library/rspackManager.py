@@ -1,14 +1,16 @@
-import zipfile, io, json, os
+import zipfile, io, json, os, shutil
 from .items import Item
 
 class ResourcePackManager:
     name = None
     item = None
     meta = None
+    icon = None
 
-    def __init__(self, name, items, desc, ver = 15):
+    def __init__(self, name, items, desc, icon, ver = 15):
         self.name = name
         self.item = items
+        self.icon = icon
         self.meta = {
             "pack": {
                 "pack_format": ver,
@@ -23,11 +25,13 @@ class ResourcePackManager:
             rspack_zip.writestr('pack.mcmeta', pack_mcmeta.getvalue())
 
             try: rspack_zip.write(f'{self.icon}.png', arcname='icon.png')
-            except: print("Icono no encontrado, recuerda cargar el icono manualmente en tu archivo ZIP")
+            except: print("Icon not found, remember to manually load the icon into your ZIP file.")
 
-            for i, item in enumerate(self.item(), start=1):
+            
+
+            for i, item in enumerate(self.item, start=1):
                 if item.texture:
-                    rspack_zip.write(f"assets/minecraft/textures/item{item.texture}.png")
+                    rspack_zip.write(f"{item.texture}.png", f"assets/minecraft/textures/item/{item.texture}.png")
 
                     customData = {
                         "parent": "minecraft:item/generated",
@@ -37,7 +41,7 @@ class ResourcePackManager:
                     }
 
                     # Crea eL Custom Model Data de los Items
-                    new_cmd = {"predicate": {"custom_model_data": item.cmdBase + i}, "model": f"{self.name}/{item.name}.json"}
+                    new_cmd = {"predicate": {"custom_model_data": item.cmdId + i}, "model": f"{self.name}/{item.name}.json"}
 
                     custom_json = io.StringIO(json.dumps(customData))
                     rspack_zip.writestr(f"assets/minecraft/models/{self.name}/{item.name}.json", custom_json.getvalue())
@@ -63,6 +67,7 @@ class ResourcePackManager:
 
                         jsonData["overrides"].append(new_cmd)
                         # Crear un archivo de texto desde cero
+                        os.makedirs("cache/baseItems")
                         with open(f"cache/baseItems/{item.itemBase}.json", 'w') as file:
                             file.write(json.dumps(jsonData))
             
@@ -73,5 +78,5 @@ class ResourcePackManager:
                 if os.path.isfile(file_route):
                     rspack_zip.write(file_route, arcname=f'assets/minecraft/models/item/{file}') # Añade el archivo al ZIP en una sección específica
 
-            os.rmdir('cache')
+            shutil.rmtree("cache")
             print("Resource pack has baked succesfully :D")
