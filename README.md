@@ -11,8 +11,9 @@ Welcome to the super duper repository of **DataPy Lib**! This is a library focus
 - Creates the basic structure of a datapack from scratch.
 - Allows adding functions.
 - Automated Resource Pack creation.
-- Creation of items
-- Automated Loot Tables
+- Creation of items.
+- Automated Loot Tables.
+- New achievements.
 
 ## Why create a library like this? 🤔
 
@@ -26,7 +27,6 @@ I had plenty of reasons. Starting off, I don't really like the format of mcfunct
 - Abstract the following functions:
   - Creation of blocks.
   - Implementation of recipes.
-  - New achievements.
 - Upload the project as a Python pip library.
 
 
