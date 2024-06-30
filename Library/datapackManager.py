@@ -3,24 +3,21 @@ from . import func
 from .rspackManager import ResourcePackManager
 
 class DatapackManager:
-    meta = None
-    name = None
-    icon = None
-    loadMsg = None
-    rpVer = None
-    desc = None
-    format = None
-    cmdId = None
-
-    items = []
-    func = []
-    listenedFunc = []
-    recipe = []
-    blocks = []
-
     def __init__(self, name, icon = "icon", mineVer = 10, rpVer = 15, desc = ""):
         self.format = mineVer
         self.desc = desc
+
+        self.meta = None
+        self.loadMsg = None
+        self.cmdId = None
+
+        self.items = []
+        self.func = []
+        self.listenedFunc = []
+        self.recipe = []
+        self.blocks = []
+        self.lootTable = []
+
         self.UpdateMeta()
 
         self.name = name.replace(" ", "_")

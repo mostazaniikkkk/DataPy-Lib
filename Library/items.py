@@ -1,26 +1,20 @@
 import json
 
 class Item:
-    item = None
-    itemDisplay = None
-    cmdId = None
-    itemBase = None
-    texture = None
-
-    name = None
-    italic = None
-    color = None
-
-    enchantment = []
-    leftClick = None
-    rightClick = None
-    lootItem = None
-
     def __init__(self, name, itemBase = "stick", texture = None, italic = False, color = "white"):
         self.name = name
         self.italic = italic
         self.color = color
         self.UpdateDisplay()
+
+        self.item = None
+        self.itemDisplay = None
+        self.cmdId = None
+
+        self.enchantment = []
+        self.leftClick = None
+        self.rightClick = None
+        self.lootItem = None
 
         self.itemBase = itemBase
         self.texture = texture

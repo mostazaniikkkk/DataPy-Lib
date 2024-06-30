@@ -1,3 +1,5 @@
+import json
+
 class LootTable:
     def __init__(self, name, rolls):
         self.name = name
@@ -15,3 +17,7 @@ class LootTable:
         }
 
         return loot
+    
+    def SetEntries(self, entry):
+        self.entries.append(json.dumps(entry.GetEntry()))
+        return self

@@ -1,5 +1,6 @@
-class SetEntrie:
-    def __init__(self, type, loot = ""):
+class Entry:
+    def __init__(self, name, type, loot = ""):
+        self.name = name
         self.type = type
         self.loot = loot
         self.functions = []
@@ -22,7 +23,7 @@ class SetEntrie:
             entry["function"] = self.functions
         
         return entry
-    
+
     def SetLootFunction(self, function):
         self.functions.append(function.value)
         return self
