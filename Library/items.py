@@ -14,13 +14,13 @@ class Item:
         self.enchantment = []
         self.leftClick = None
         self.rightClick = None
-        self.lootItem = None
+        self.recipe = None
 
         self.itemBase = itemBase
         self.texture = texture
 
         self.UpdateItem()
-    
+
     #Funciones constructores
     def UpdateItem(self):
         self.item = f"{self.itemBase}{{{{display: Name '{json.dumps(self.itemDisplay)}',\
@@ -55,4 +55,8 @@ class Item:
             "italic": self.italic,
             "color": self.color
         }
+        return self
+    
+    def SetRecipe(self, recipe):
+        self.recipe = recipe
         return self

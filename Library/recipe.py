@@ -1,14 +1,21 @@
 from .func import Function
 from .Loot import lootTable, lootFunction, entrie
+from Advancement.Criteria import criteria, unlockRecipe
+from Advancement import reward, advancement
 
 class Recipe:
-    def __init__(self, name, result, count = 1):
+    def __init__(self, name, result = "", count = 1):
         self.name = name
         self.keys = {}
         self.pattern = []
         self.count = count
 
-        self.result = result if "minecraft:" in result else "minecraft:knowledge_book"
+        #Custom Loot
+        self.loot = None
+        self.advancement = None
+        self.function = None
+
+        self.result = f"minecraft:{result}" if result != "" else "minecraft:knowledge_book"
 
     def CreateRecipe(self):
         recipe = {
@@ -22,20 +29,46 @@ class Recipe:
             } 
         return recipe
 
-    #Importante: Estas 2 funciones esta diseñada para el Datapack Manager
-    #Solo se ejecuta en caso de custom item, por favor no llamar :)
-    def CreateLoot(self, itemTag):
+
+    #Solo llamar en caso de que el resultado sea un item custom, idealmente no llamar manualmente :D
+    def SetLoot(self, itemTag):
         entry = entrie.Entry(self.name)\
             .SetLootFunction(lootFunction.SetNbt(itemTag).value)
 
         loot = lootTable.LootTable(f"{self.name}_loot", 1)\
             .SetEntries(entry)
-        return loot
+        
+        self.loot = loot
+        return self
     
+    def SetAdvancement(self, datapackName):
+        rew = reward.Reward()\
+            .SetFunction(f"{datapackName}:{self.name}")
+        
+        unlock = unlockRecipe.UnlockRecipe(self.name)\
+            .SetRecipe(datapackName, self.name)
+
+        crit = criteria.Criteria()\
+            .SetRequeriment(unlock.SetRecipe())
+        
+        advance = advancement.Advancement()\
+            .SetReward(rew)\
+            .SetCriteria(crit)\
+            .SetName(self.name)
+        
+        self.advancement = advance
+        return self
+      
     def CreateFuncRecipe(self, datapackName):
         func = Function(f"{self.name}_recipe")
+        
         func.addFunction("clear", f"knowledge_book 1", "@s")
-        func.addFunction("loot give", f"{datapackName}:")
+        func.addFunction("loot give", f"loot {datapackName}:crafts/{self.loot.name}_loot", "@s")
+        func.addFunction("advancement revoke", f"{datapackName}:crafts/{self.advancement.name}", "@s")
+        func.addFunction("recipe take", f"{datapackName}:{self.name}", "@s")
+        
+        self.function = func
+        return self
 
     # Constructores
     def SetKeys(self, keys):

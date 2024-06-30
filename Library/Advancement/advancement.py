@@ -2,6 +2,7 @@ import json
 
 class Advancement:
     def __init__(self):
+        self.name = None
         self.display = None
         self.criteria = None
         self.reward = None
@@ -32,4 +33,8 @@ class Advancement:
     
     def SetReward(self, reward):
         self.reward = json.dumps(reward.GetReward())
+        return self
+    
+    def SetName(self, name):
+        self.name = name
         return self
