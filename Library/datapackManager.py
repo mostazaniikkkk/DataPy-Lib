@@ -1,5 +1,5 @@
 import json, io, zipfile, random, os
-from . import func
+from .func import Function
 from .rspackManager import ResourcePackManager
 
 class DatapackManager:
@@ -17,6 +17,7 @@ class DatapackManager:
         self.recipe = []
         self.blocks = []
         self.lootTable = []
+        self.advancement = []
 
         self.UpdateMeta()
 
@@ -32,16 +33,10 @@ class DatapackManager:
             }
         }
 
-    def AddLoadMsg(self, msg = f"Datapack {name}: Loaded."):
+    def AddLoadMsg(self, msg = f"Datapack Loaded."):
         if isinstance(msg, str): self.loadMsg = f"tellraw as @a {msg}"
-        elif isinstance(msg, func.Function): self.loadMsg = "\n".join(msg.functionList)
+        elif isinstance(msg, Function): self.loadMsg = "\n".join(msg.functionList)
         else: print("Error: Tipo de dato no admitido, por favor configurar load.mcfuncion manualmente")
-
-    def JsonDef(self, value):
-        strData = {
-            "values": [f"{self.name}:{value}"]
-        }
-        return io.StringIO(json.dumps(strData)).getvalue()
 
     def Make(self):
         print("Baking Datapack...")
@@ -54,26 +49,62 @@ class DatapackManager:
 
         #ZIP Manager
         with zipfile.ZipFile(f'{self.name}.zip', 'w') as datapack_zip:
+            #SubFunciones
+            def GetFile(string): return io.StringIO(string).getvalue()
+            def ZipFile(stringFile, route): datapack_zip.writestr(f"data/{route}/{self.name}/", GetFile(stringFile))
+            def JsonDef(self, type, value):
+                strData = {
+                    "values": [f"{self.name}:{type}/{value}"]
+                }
+                return io.StringIO(json.dumps(strData)).getvalue()
+
             #Carga basica
-            pack_mcmeta = io.StringIO(json.dumps(self.meta)) # Crear el archivo pack.mcmeta en memoria
-            datapack_zip.writestr('pack.mcmeta', pack_mcmeta.getvalue()) # Añadir pack.mcmeta al archivo ZIP
+            datapack_zip.writestr('pack.mcmeta', GetFile(json.dumps(self.meta))) # Añadir pack.mcmeta al archivo ZIP
 
             try: datapack_zip.write(f'{self.icon}.png', arcname='icon.png') #Carga el icono al zip
             except: print("Icon not found, remember to manually load the icon into your ZIP file.")
 
-            datapack_zip.writestr('data/minecraft/tags/functions/load.json', self.JsonDef("load"))
-            datapack_zip.writestr('data/minecraft/tags/functions/tick.json', self.JsonDef("tick"))
+            datapack_zip.writestr('data/minecraft/tags/functions/load.json', JsonDef("load")) #Load
 
             #Funciones
-            fileName = self.name
-            for sentence in self.func:
-                if sentence.functionList:  # Comprueba si functionList no está vacío
-                    function_mcmeta = io.StringIO("\n".join(sentence.functionList))
-                    datapack_zip.writestr(f"data/{fileName}/functions/{sentence.name}.mcfunction", function_mcmeta.getvalue())
             
+            #Items
             for item in self.items:
-                debug_mcmeta = io.StringIO(f"give @p {item.item}")
-                datapack_zip.writestr(f"data/{self.name}/function/give/{item.name}.mcfunction", debug_mcmeta.getvalue())
+                #Genera un give a modo de Debug
+                ZipFile(f"function/give/{item.name}.mcfunction", f"give @p {item.item}")
+
+                #Receta T-T
+                if item.recipe is not None:
+                    recipe = item.recipe\
+                        .SetLoot(item.item)\
+                        .SetAdvancement(self.name)\
+                        .CreateFuncRecipe(self.name)
+                    
+                    #Compresion al ZIP de la receta, funcion de carga, loot tables y avances respectivamente
+                    ZipFile(f"recipes/{recipe.name}.json", json.dumps(recipe.CreateRecipe()))
+                    ZipFile(f"function/craft/{item.name}.mcfunction", "\n".join(item.recipe.function.functionList))
+                    ZipFile(f"loot_tables/craft/{item.name}.json", json.dumps(item.recipe.loot.GetLoot()))
+                    ZipFile(f"advancement/craft/{item.name}.json", json.dumps(item.recipe.advancement.GetAdvancement()))
+
+            #Agrega recetas, loot tables, funciones y avances declarados en la clase datapack manager
+            for recipe in self.recipe: ZipFile(f"recipes/{recipe.name}.json", json.dumps(recipe.CreateRecipe()))
+            for loot in self.lootTable: ZipFile(f"loot_tables/{loot.name},json", json.dumps(loot.GetLoot()))
+            for sentence in self.func: ZipFile(f"functions/{sentence.name}.mcfunction", "\n".join(sentence.functionList))
+            for adv in self.advancement: ZipFile(f"advancements/{adv.name}", json.dumps(adv.GetAdvancement(self)))
+
+            #Bloques
+            if self.blocks:
+                blockManager = Function("BlockManager")\
+                    .AddFunction("execute at", "[type=minecraft:item,nbt={Item:{tag:{KillThis:1b}}}]\
+                                 if block ~ ~ ~ water run setblock ~ ~ ~ air", "@e")\
+                    .AddFunction("kill", "[type=minecraft:item,nbt={Item:{tag:{KillThis:1b}}}]", "@e")\
+                    .AddFunction("execute as", "if data entity @s SelectedItem.tag.CustomModelData store result score\
+                                 @s heldItem run data get entity @s SelectedItem.tag.CustomModelData","@a")
+                
+                self.listenedFunc.append(blockManager)
+
+            datapack_zip.writestr('data/minecraft/tags/functions/tick.json', JsonDef("tick", ",".join(self.listenedFunc))) #Tick
+            
 
         #Datapack Manager
         if self.items: ResourcePackManager(self.name, self.items, self.cmdId, self.icon).Make()

@@ -62,10 +62,10 @@ class Recipe:
     def CreateFuncRecipe(self, datapackName):
         func = Function(f"{self.name}_recipe")
         
-        func.addFunction("clear", f"knowledge_book 1", "@s")
-        func.addFunction("loot give", f"loot {datapackName}:crafts/{self.loot.name}_loot", "@s")
-        func.addFunction("advancement revoke", f"{datapackName}:crafts/{self.advancement.name}", "@s")
-        func.addFunction("recipe take", f"{datapackName}:{self.name}", "@s")
+        func.AddFunction("clear", f"knowledge_book 1", "@s")
+        func.AddFunction("loot give", f"loot {datapackName}:crafts/{self.loot.name}_loot", "@s")
+        func.AddFunction("advancement revoke", f"{datapackName}:crafts/{self.advancement.name}", "@s")
+        func.AddFunction("recipe take", f"{datapackName}:{self.name}", "@s")
         
         self.function = func
         return self

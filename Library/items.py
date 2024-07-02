@@ -12,8 +12,7 @@ class Item:
         self.cmdId = None
 
         self.enchantment = []
-        self.leftClick = None
-        self.rightClick = None
+        self.function = None
         self.recipe = None
 
         self.itemBase = itemBase
@@ -41,14 +40,10 @@ class Item:
         self.UpdateItem()
         return self
     
-    def SeRightAction(self, function):
-        self.rightClick = function
+    def SetFunction(self, function):
+        self.function = function
         return self
-    
-    def SetLeftAction(self, function):
-        self.leftClick = function
-        return self
-    
+
     def UpdateDisplay(self):
         self.itemDisplay = {
             "text": self.name.replace(" ", "_"),
