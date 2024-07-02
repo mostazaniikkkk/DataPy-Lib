@@ -1,5 +1,4 @@
 import json, io, zipfile, random, os
-from .func import Function
 from .rspackManager import ResourcePackManager
 
 class DatapackManager:
@@ -82,7 +81,7 @@ class DatapackManager:
             for loot in self.lootTable: ZipFile(f"loot_tables/{loot.name},json", json.dumps(loot.GetLoot()))
             for sentence in self.func: ZipFile(f"functions/{sentence.name}.mcfunction", "\n".join(sentence.functionList))
             for adv in self.advancement: ZipFile(f"advancements/{adv.name}", json.dumps(adv.GetAdvancement(self)))
-            
+
         #Datapack Manager
         if self.items: ResourcePackManager(self.name, self.items, self.cmdId, self.icon).Make()
 
