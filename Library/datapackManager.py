@@ -8,9 +8,9 @@ class DatapackManager:
         self.desc = desc
 
         self.meta = None
-        self.loadMsg = None
         self.cmdId = None
 
+        self.loadFunc = []
         self.items = []
         self.func = []
         self.listenedFunc = []
@@ -32,11 +32,6 @@ class DatapackManager:
                 "description": self.desc
             }
         }
-
-    def AddLoadMsg(self, msg = f"Datapack Loaded."):
-        if isinstance(msg, str): self.loadMsg = f"tellraw as @a {msg}"
-        elif isinstance(msg, Function): self.loadMsg = "\n".join(msg.functionList)
-        else: print("Error: Tipo de dato no admitido, por favor configurar load.mcfuncion manualmente")
 
     def Make(self):
         print("Baking Datapack...")
@@ -64,10 +59,6 @@ class DatapackManager:
             try: datapack_zip.write(f'{self.icon}.png', arcname='icon.png') #Carga el icono al zip
             except: print("Icon not found, remember to manually load the icon into your ZIP file.")
 
-            datapack_zip.writestr('data/minecraft/tags/functions/load.json', JsonDef("load")) #Load
-
-            #Funciones
-            
             #Items
             for item in self.items:
                 #Genera un give a modo de Debug
@@ -91,21 +82,7 @@ class DatapackManager:
             for loot in self.lootTable: ZipFile(f"loot_tables/{loot.name},json", json.dumps(loot.GetLoot()))
             for sentence in self.func: ZipFile(f"functions/{sentence.name}.mcfunction", "\n".join(sentence.functionList))
             for adv in self.advancement: ZipFile(f"advancements/{adv.name}", json.dumps(adv.GetAdvancement(self)))
-
-            #Bloques
-            if self.blocks:
-                blockManager = Function("BlockManager")\
-                    .AddFunction("execute at", "[type=minecraft:item,nbt={Item:{tag:{KillThis:1b}}}]\
-                                 if block ~ ~ ~ water run setblock ~ ~ ~ air", "@e")\
-                    .AddFunction("kill", "[type=minecraft:item,nbt={Item:{tag:{KillThis:1b}}}]", "@e")\
-                    .AddFunction("execute as", "if data entity @s SelectedItem.tag.CustomModelData store result score\
-                                 @s heldItem run data get entity @s SelectedItem.tag.CustomModelData","@a")
-                
-                self.listenedFunc.append(blockManager)
-
-            datapack_zip.writestr('data/minecraft/tags/functions/tick.json', JsonDef("tick", ",".join(self.listenedFunc))) #Tick
             
-
         #Datapack Manager
         if self.items: ResourcePackManager(self.name, self.items, self.cmdId, self.icon).Make()
 
