@@ -6,11 +6,13 @@ from rich.padding import Padding
 
 class Test:
     def __init__(self):
+        self.showResult = False
         self.console = Console()
         self.tests = 0
         self.cantTest = 0
         self.ClearScreen()
         self.console.print(f"Mostazaniikkk´s Unit test module 🔎⚱️")
+        self.console.print("[blink yellow]Remember that errors that appear in white [green underline]are not real errors[/green underline], they are just library tests 🤣[/blink yellow]\n")
 
     def ErrorPrint(self, var): 
         self.console.print(f"🚨 [bold red]Error[/bold red]: The property {var} does not behave as expected", style="bold red")
@@ -35,7 +37,13 @@ class Test:
                 self.console.print(padded_panel)
         return wrapper
     
-    def Exit(self):self.console.print(f"{self.tests} out of {self.cantTest} tests passed {'🎉' if self.tests == self.cantTest else '😢'}", style="bold blue")
+    def Exit(self):self.console.print(f"\n{self.tests} out of {self.cantTest} tests passed {'🎉' if self.tests == self.cantTest else '😢'}", style="bold blue")
+
+    def ShowJson(self, value):
+        ogJson = json.dumps(value, indent=4)
+        syntax = Syntax(ogJson, "json", theme="monokai", line_numbers=True)
+        panel = Panel(syntax, width=self.console.width)
+        self.console.print(panel, style="bold yellow")
 
     @UnitTest
     def JsonTest(self, data, result, area, varName):
@@ -43,6 +51,7 @@ class Test:
 
         if area in data and data[area] == dataResult[area]: 
             self.console.print(f"✅ {varName} works correctly.", style="bold green")
+            if self.showResult == True: self.ShowJson(data)
         else:
             def ShowData(message, spected, dataResult):
                 jsonError = f"{message}:\n\n[green]{dataResult}[/green]\n[red]{spected}[/red]"
