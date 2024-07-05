@@ -45,7 +45,9 @@ class DatapackManager:
         with zipfile.ZipFile(f'{self.name}.zip', 'w') as datapack_zip:
             #SubFunciones
             def GetFile(string): return io.StringIO(string).getvalue()
-            def ZipFile(stringFile, route): datapack_zip.writestr(f"data/{route}/{self.name}/", GetFile(stringFile))
+            def ZipFile(stringFile, route):
+                try: datapack_zip.writestr(f"data/{self.name}/{route}/", GetFile(stringFile))
+                except: print(f"Error: Hubo un problema al comprimir el archivo {route}, por favor compruebe el codigo, en caso de que sea un fallo de la libreria reportelo en el repositorio oficial :()")
             def JsonDef(self, type, value):
                 strData = {
                     "values": [f"{self.name}:{type}/{value}"]
